@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>Participatory Mapping Projects</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css' rel='stylesheet' />
+    <link href="https://api.mapbox.com/mapbox-assembly/v0.24.0/assembly.min.css" rel="stylesheet">
+    <script async defer src="https://api.mapbox.com/mapbox-assembly/v0.24.0/assembly.js"></script>
+
+    <style>
+        body { margin:0; padding:0; }
+
+        h2,
+h3 {
+  margin: 10px;
+  font-size: 1.2em;
+}
+
+h3 {
+  font-size: 1em;
+}
+
+p {
+  font-size: 0.85em;
+  margin: 10px;
+  text-align: left;
+}
+
+      #map { position:absolute; top:0; bottom:0; width:100%; z-index:-1;}
+
+      /**
+* Set rules for how the map overlays
+* (info box and legend) will be displayed
+* on the page. */
+.map-overlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.8);
+  margin-right: 20px;
+  font-family: Arial, sans-serif;
+  overflow: auto;
+  border-radius: 3px;
+}
+
+#features {
+  top: 0;
+  height: 100px;
+  margin-top: 20px;
+  width: 250px;
+}
+
+
+    </style>
+  </head>
+
+</style>
+
+  <body>
+    <div id='map'></div>
+    <div class='map-overlay' id='features'><h2>Participatory Mapping Projects</h2><div id='pd'><p>To add your project <a href="https://www.inaturalist.org/">iNaturalist</a>, <a href="http://zansdi.environment.fi/">ZanSDI</a></p></div></div>
+<div class='map-overlay' id='legend'></div>
+    <script>
+      // Replace this access token with your own if
+      // you plan to use this template in another application.
+      // Get a token from mapbox.com/studio/account/tokens
+      mapboxgl.accessToken = 'pk.eyJ1IjoicG1hcHBpbmdzb2NpZXR5IiwiYSI6ImNrNTl3YnBlcjB0ejczam15M2g1MjRlNTIifQ.lC65Iv5NeuM2dF0zEbQIGg'; // replace this with your access token
+      var map = new mapboxgl.Map({
+        container: 'map',
+        // **********************************************************
+        // [TRY IT] - Change the map style to another default
+        // style at mapbox.com/mapbox-gl-js/api/#map
+        // **********************************************************
+        style: 'mapbox://styles/pmappingsociety/ck59xngu11r381dmrag45jjd2', // your style URL
+        center: [-17.065886, 34.250036],
+        zoom: 1
+      });
+
+      map.on('load', function() {
+  // make a pointer cursor
+    map.getCanvas().style.cursor = 'default';
+
+});
+
+      //map.on('click', function(e) {
+      //var features = map.queryRenderedFeatures(e.point, {
+        //layers: ['iNaturalist-Zanzibar'] // replace this with the name of the layer
+      //});
+      //if (!features.length) {
+        //return;
+      //}
+      //var feature = features[0];
+      //var popup = new mapboxgl.Popup({ offset: [0, -15] })
+        //.setLngLat(feature.geometry.coordinates)
+        //.setHTML('<h3>' + feature.properties.common_nam + '</h3><p>' + feature.properties.observed_o + '</p>')
+        //.setLngLat(feature.geometry.coordinates)
+        //.addTo(map);
+      //});
+
+    </script>
+  </body>
+</html>
