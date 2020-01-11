@@ -32,8 +32,7 @@ p {
 
       /**
 * Set rules for how the map overlays
-* (info box and legend) will be displayed
-* on the page. */
+* (title box) will be displayed on the page. */
 .map-overlay {
   position: absolute;
   bottom: 0;
@@ -52,6 +51,52 @@ p {
   width: 250px;
 }
 
+.mapboxgl-popup-close-button {
+        display: none;
+      }
+
+        .mapboxgl-popup-content {
+        font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+        padding: 0;
+        width: 300px;
+              max-height: 250px;
+              overflow: auto;
+      }
+
+        .mapboxgl-popup-content-wrapper {
+          padding: 1%;
+        }
+
+        .mapboxgl-popup-content h3 {
+        background: #4C305A;
+        color: #fff;
+        margin: 0;
+        display: block;
+        padding: 10px;
+        border-radius: 3px 3px 0 0;
+        font-weight: 600;
+        margin-top: 0px;
+      }
+
+    .mapboxgl-popup-content h4 {
+        margin: 0;
+        display: block;
+        padding: 5px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+    .mapboxgl-popup-content div {
+        padding: 10px;
+      }
+
+    .mapboxgl-popup-anchor-top > .mapboxgl-popup-content {
+      margin-top: 15px;
+    }
+
+    .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
+      border-bottom-color: #47d61b;
+    }
 
     </style>
   </head>
@@ -94,10 +139,19 @@ p {
       var feature = features[0];
       var popup = new mapboxgl.Popup({ offset: [0, -15] })
         .setLngLat(feature.geometry.coordinates)
-        .setHTML('<h3>' + feature.properties.Title + '</h3><p>Entity:<p>' + feature.properties.Entity + '<p>Description:<p>' + feature.properties.Description + '<p>Dates Active:<p>' + feature.properties.Date + '<p>Website:<p>' + feature.properties.Website + '<p>Contact:<p>' + feature.properties.Contact + '</p>')
+        .setHTML('<h3>' + feature.properties.Title + '</h3><h4>Entity:</h4><p>' + feature.properties.Entity + '</p><h4>Description:</h4><p>' + feature.properties.Description + '</p><h4>Dates Active:</h4><p>' + feature.properties.Date + '</p><h4>Website:</h4><p>' + feature.properties.Website + '</p><h4>Contact:</h4><p>' + feature.properties.Contact + '</p>')
         .setLngLat(feature.geometry.coordinates)
         .addTo(map);
       });
+
+      map.on('mouseenter', 'ispm-points', function() {
+map.getCanvas().style.cursor = 'pointer';
+});
+ 
+// Change it back to a pointer when it leaves.
+map.on('mouseleave', 'ispm-points', function() {
+map.getCanvas().style.cursor = '';
+});
 
     </script>
   </body>
