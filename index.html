@@ -118,6 +118,7 @@ p {
     <div class='map-overlay' id='legend'></div>
     <div id='map'></div>
     <script>
+
     var transformRequest = (url, resourceType) => {
       var isMapboxRequest =
         url.slice(8, 22) === "api.mapbox.com" ||
@@ -128,6 +129,8 @@ p {
           : url
       };
     };
+
+
   //YOUR TURN: add your Mapbox token 
     mapboxgl.accessToken = 'pk.eyJ1IjoicG1hcHBpbmdzb2NpZXR5IiwiYSI6ImNrNTl3YnBlcjB0ejczam15M2g1MjRlNTIifQ.lC65Iv5NeuM2dF0zEbQIGg'; //Mapbox token 
     var map = new mapboxgl.Map({
@@ -142,13 +145,15 @@ p {
       $.ajax({
         type: "GET",
         //YOUR TURN: Replace with csv export link
-        url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRtKTujKQwRqr4Q6P3m-8fbvqrXj8mrhylNhHocRuqWcCPkwJBl901im5yFtbvSUtIu6MlYnQweGSjo/pub?output=csv',
+        url: 'https://docs.google.com/spreadsheets/d/1kRw3czKa3o1cvDInKmi1seVeFROl5oYBKXTJE_1wOC8/pub?output=csv',
         dataType: "text",
         success: function (csvData) { makeGeoJSON(csvData); }
       });
 
       function makeGeoJSON(csvData) {
         csv2geojson.csv2geojson(csvData, {
+          // Properties can be specified or "guessed" : https://github.com/mapbox/csv2geojson/blob/gh-pages/index.js#L21
+          // If your CSV isn't loading, try putting the lat & lon field names below     
           latfield: 'Latitude',
           lonfield: 'Longitude',
           delimiter: ','
