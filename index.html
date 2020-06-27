@@ -145,7 +145,7 @@ p {
       $.ajax({
         type: "GET",
         //YOUR TURN: Replace with csv export link
-        url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRtKTujKQwRqr4Q6P3m-8fbvqrXj8mrhylNhHocRuqWcCPkwJBl901im5yFtbvSUtIu6MlYnQweGSjo/pub?output=csv ',
+        url: 'https://docs.google.com/spreadsheets/d/1kRw3czKa3o1cvDInKmi1seVeFROl5oYBKXTJE_1wOC8/gviz/tq?tqx=out:csv&sheet=Sheet1',
         dataType: "text",
         success: function (csvData) { makeGeoJSON(csvData); }
       });
@@ -170,7 +170,8 @@ p {
               },
               'paint': {
                 'circle-radius': 5,
-                'circle-color': "purple"
+                'circle-color': "purple",
+                'circle-opacity': 0
               }
             });
 
@@ -183,8 +184,7 @@ p {
               //set popup text 
               //You can adjust the values of the popup to match the headers of your CSV. 
               // For example: e.features[0].properties.Name is retrieving information from the field Name in the original CSV. 
-              var description = `<h3>` + e.features[0].properties.Title + `</h3>` + `<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.Location_name + `</h4>` + `<h4>` + `<b>` + `Entity: ` + `</b>` + e.features[0].properties.Entity + `</h4>`;
-
+              var description = '<h3>' + e.features[0].properties.Title + '</h3><h4>Entity:</h4><p>' + e.features[0].properties.Entity + '</p><h4>Description:</h4><p>' + e.features[0].properties.Description + '</p><h4>Location:</h4><p>' + e.features[0].properties.Location_name + '</p><h4>Dates Active:</h4><p>' + e.features[0].properties.Date + '</p><h4>Website:</h4>' + '<p><a href="' + e.features[0].properties.Website + '" target="_blank">' + '<p>Link</p>' + '</a></p><h4>Contact:</h4><p>' + e.features[0].properties.Contact_email + '</p>';
               // Ensure that if the map is zoomed out such that multiple
               // copies of the feature are visible, the popup appears
               // over the copy being pointed to.
@@ -214,32 +214,6 @@ p {
             var bbox = turf.bbox(data);
             map.fitBounds(bbox, { padding: 50 });          
 
-          });
-        
-        // Add pop-ups for polygon layer from style
-        map.addLayer({
-          id: 'ispm-polys',
-          source: {
-            type: 'vector',
-            url: 'mapbox://styles/pmappingsociety/ck5a6f9pg194q1cru9l23xna2'
-          },
-          'source-layer': 'ispm-polys',
-          type: 'fill'
-        });
-
-        map.on('click', 'ispm-polys', function(e) {
-            new mapboxgl.Popup({ offset: [0, -15] })
-              .setLngLat(e.lngLat)
-              .setHTML('<h3>' + feature.properties.Title + '</h3><h4>Entity:</h4><p>' + feature.properties.Entity + '</p><h4>Description:</h4><p>' + feature.properties.Description + '</p><h4>Dates Active:</h4><p>' + feature.properties.Date + '</p><h4>Website:</h4>' + '<p><a href="' + feature.properties.Website + '" target="_blank">' + '<p>Link</p>' + '</a></p><h4>Contact:</h4><p>' + feature.properties.Contact + '</p>')
-              .addTo(map);
-            });
-
-          map.on('mouseenter', 'ispm-polys', function() {
-          map.getCanvas().style.cursor = 'pointer';
-          });
- 
-          map.on('mouseleave', 'ispm-polys', function() {
-          map.getCanvas().style.cursor = '';
           });
 
         });
@@ -273,7 +247,7 @@ map.addLayer({
 map.on('click', 'polygons', function(e) {
 new mapboxgl.Popup()
 .setLngLat(e.lngLat)
-.setHTML('<h3>' + e.features[0].properties.Title + '</h3><p>Entity:<p>' + e.features[0].properties.Entity + '<p>Description:<p>' + e.features[0].properties.Description + '<p>Dates Active:<p>' + e.features[0].properties.Date + '<p>Website:<p>' + e.features[0].properties.Website + '<p>Contact:<p>' + e.features[0].properties.Contact + '</p>')
+.setHTML('<h3>' + e.features[0].properties.Title + '</h3><h4>Entity:</h4><p>' + e.features[0].properties.Entity + '</p><h4>Description:</h4><p>' + e.features[0].properties.Description + '</p><h4>Location:</h4><p>' + e.features[0].properties.Location + '</p><h4>Dates Active:</h4><p>' + e.features[0].properties.Date + '</p><h4>Website:</h4>' + '<p><a href="' + e.features[0].properties.Website + '" target="_blank">' + '<p>Link</p>' + '</a></p><h4>Contact:</h4><p>' + e.features[0].properties.Contact_email + '</p>')
 .addTo(map);
 });
  
