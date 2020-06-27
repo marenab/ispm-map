@@ -5,8 +5,8 @@
     <title>Participatory Mapping Projects</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-    <script src="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
-    <link href="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css" rel="stylesheet" />
     <script src='https://npmcdn.com/csv2geojson@latest/csv2geojson.js'></script>
     <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
 
@@ -47,9 +47,9 @@ p {
 
 #features {
   top: 0;
-  height: 100px;
+  height: 70px;
   margin-top: 20px;
-  width: 250px;
+  width: 350px;
 }
  /* Popup styling */
 
@@ -114,6 +114,8 @@ p {
 </style>
 
   <body>
+    <div class='map-overlay' id='features'><h2>Participatory Mapping Projects</h2><div id='pd'><p>Add a location with <a href="https://docs.google.com/forms/d/e/1FAIpQLSej-oBwRHjm9N1njVOdPWxe6BteziY5xS5IvsuPepL8iyU3MQ/viewform?usp=sf_link" target="_blank">this form</a></p></div></div>
+    <div class='map-overlay' id='legend'></div>
     <div id='map'></div>
     <script>
     var transformRequest = (url, resourceType) => {
@@ -140,7 +142,7 @@ p {
       $.ajax({
         type: "GET",
         //YOUR TURN: Replace with csv export link
-        url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQhxI5a2uXsNbLbP-bVT3-UNE5rMJeJUBtlDuz6tMdLJVJTxLo6_cMKDSZgXqV91KGi1cykhHl4rUE7/pub?gid=1822929230&single=true&output=csv',
+        url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQhxI5a2uXsNbLbP-bVT3-UNE5rMJeJUBtlDuz6tMdLJVJTxLo6_cMKDSZgXqV91KGi1cykhHl4rUE7/pub?output=csv',
         dataType: "text",
         success: function (csvData) { makeGeoJSON(csvData); }
       });
@@ -201,19 +203,87 @@ p {
             });
 
             // Change it back to a pointer when it leaves.
-            map.on('mouseleave', 'places', function () {
+            map.on('mouseleave', 'csvData', function () {
               map.getCanvas().style.cursor = '';
             });
 
+          //Turf variable
             var bbox = turf.bbox(data);
-            map.fitBounds(bbox, { padding: 50 });
+            map.fitBounds(bbox, { padding: 50 });          
 
+          });
+        
+        // Add pop-ups for polygon layer from style
+        map.addLayer({
+          id: 'ispm-polys',
+          source: {
+            type: 'vector',
+            url: 'mapbox://styles/pmappingsociety/ck5a6f9pg194q1cru9l23xna2'
+          },
+          'source-layer': 'ispm-polys',
+          type: 'fill'
+        });
+
+        map.on('click', 'ispm-polys', function(e) {
+            new mapboxgl.Popup({ offset: [0, -15] })
+              .setLngLat(e.lngLat)
+              .setHTML('<h3>' + feature.properties.Title + '</h3><h4>Entity:</h4><p>' + feature.properties.Entity + '</p><h4>Description:</h4><p>' + feature.properties.Description + '</p><h4>Dates Active:</h4><p>' + feature.properties.Date + '</p><h4>Website:</h4>' + '<p><a href="' + feature.properties.Website + '" target="_blank">' + '<p>Link</p>' + '</a></p><h4>Contact:</h4><p>' + feature.properties.Contact + '</p>')
+              .addTo(map);
+            });
+
+          map.on('mouseenter', 'ispm-polys', function() {
+          map.getCanvas().style.cursor = 'pointer';
+          });
+ 
+          map.on('mouseleave', 'ispm-polys', function() {
+          map.getCanvas().style.cursor = '';
           });
 
         });
       };
     });
 
+// Add pop-ups for polygon layer from style
+
+map.on('load', function() {
+// Add a source for the polygons.
+map.addSource('ispm-polygons', {
+'type': 'vector',
+'url': 'mapbox://pmappingsociety.ck5a65ztw0y622opqpp3np3tb-7nn06'
+});
+ 
+// Add a layer showing the state polygons.
+map.addLayer({
+'id': 'polygons',
+'type': 'fill',
+'source': 'ispm-polygons',
+'source-layer':'ISPM-polys',
+'paint': {
+'fill-color': "#fec016",
+'fill-opacity': 0.1,
+'fill-outline-color': "#fec016"
+}
+});
+ 
+// When a click event occurs on a feature in the states layer, open a popup at the
+// location of the click, with description HTML from its properties.
+map.on('click', 'polygons', function(e) {
+new mapboxgl.Popup()
+.setLngLat(e.lngLat)
+.setHTML('<h3>' + e.features[0].properties.Title + '</h3><p>Entity:<p>' + e.features[0].properties.Entity + '<p>Description:<p>' + e.features[0].properties.Description + '<p>Dates Active:<p>' + e.features[0].properties.Date + '<p>Website:<p>' + e.features[0].properties.Website + '<p>Contact:<p>' + e.features[0].properties.Contact + '</p>')
+.addTo(map);
+});
+ 
+// Change the cursor to a pointer when the mouse is over the states layer.
+map.on('mouseenter', 'polygons', function() {
+map.getCanvas().style.cursor = 'pointer';
+});
+ 
+// Change it back to a pointer when it leaves.
+map.on('mouseleave', 'polygons', function() {
+map.getCanvas().style.cursor = '';
+});
+});
 
 
 
