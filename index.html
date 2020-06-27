@@ -142,12 +142,10 @@ p {
       $.ajax({
         type: "GET",
         //YOUR TURN: Replace with csv export link
-        url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQhxI5a2uXsNbLbP-bVT3-UNE5rMJeJUBtlDuz6tMdLJVJTxLo6_cMKDSZgXqV91KGi1cykhHl4rUE7/pub?output=csv',
+        url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRtKTujKQwRqr4Q6P3m-8fbvqrXj8mrhylNhHocRuqWcCPkwJBl901im5yFtbvSUtIu6MlYnQweGSjo/pub?output=csv',
         dataType: "text",
         success: function (csvData) { makeGeoJSON(csvData); }
       });
-
-
 
       function makeGeoJSON(csvData) {
         csv2geojson.csv2geojson(csvData, {
